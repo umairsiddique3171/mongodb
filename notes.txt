@@ -1,0 +1,2 @@
+-- storage engine convert json to bson for increasing computational efficiency.
+-- you can use mongodb shell to connect to the mongodb server.
