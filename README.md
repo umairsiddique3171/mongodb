@@ -80,12 +80,8 @@ To import documents from json file, exit mongosh and type the following commands
 ```
 mongoimport jsonfile.json -d database_name -c collection_name
 mongoimport jsonfile.json -d database_name -c collection_name --jsonArray
-```
-Forexample: 
-```
-C:\Users\US593>mongoimport C:\Users\US593\OneDrive\Desktop\import_json\products.json -d shop -c products
 
-# if documents in json file are in array
+C:\Users\US593>mongoimport C:\Users\US593\OneDrive\Desktop\import_json\products.json -d shop -c products
 C:\Users\US593>mongoimport C:\Users\US593\OneDrive\Desktop\import_json\sales.json -d shop -c sales --jsonArray
 ```
 3. **Exporting JSON**
@@ -93,9 +89,7 @@ C:\Users\US593>mongoimport C:\Users\US593\OneDrive\Desktop\import_json\sales.jso
 To export documents to json file, type the following commands in your terminal:
 ```
 mongoexport -d database_name -c collection_name -o file_name
-```
-Forexample: 
-```
+
 mongoexport  -d shop -c sales -o C:\Users\US593\OneDrive\Desktop\import_json\sales1.json
 ```
 4. **Comparison Operators**
@@ -105,9 +99,7 @@ $lt     $lte    $in     $nin
 ```
 ```
 db.<collection-name>.find({'fieldname':{$operator:value}});
-```
-Forexample: 
-```
+
 db.products.find({'price':{$eq:699}});
 db.categories.find({'price':{$in:[249,129,39]}});
 ```
@@ -122,5 +114,92 @@ db.<collection-name>.find({'fieldname':{$operator:value}})>limit(5).sort({'field
 ```
 $and        $or         $not        $nor
 ```
+
+and, or and nor
+
+```
+{
+  "$operator": [
+    { "field1": value1 },
+    { "field2": value2 },
+    { "field3": value3 },
+    ...
+  ]
+}
+
+db.products.find({
+  '$and': [
+    { 'price': { '$lt': 1000 } },
+    { 'name': 'Diamond Ring' }
+  ]
+})
+```
+
+not
+
+```
+{
+  "field": {
+    $not : { "operator": value }
+  }
+}
+
+db.products.find({
+    'price':{$not:{$eq:100}}
+    })
+```
+7. **Complex Expressions**
+```
+{$expr:{operator:[field,value]}}
+ 
+db.sales.find({$expr:{$gt:[{$multiply:['$quantity','$price']},'$target_price']}})
+```
+8. **Elements Operators**
+```
+$exists     $type     $size
+```
+```
+{field:{$exists:<boolean>}}
+
+db.products.find({'price':{$exists:true}}).count()
+```
+```
+{field:{$type:"<bson-data-type>"}}
+
+db.products.find({'price':{$type:'number'}}).count()
+```
+```
+{field:{$size:<array-length>}}
+
+db.comments.find({'comments':{$size:4}})
+```
+9. **Projection**
+```
+db.<collection-name>.find({},{field1:1,field2:1})
+
+db.comments.find({},{comments:1,_id:0})
+```
+10. **Embedded Documents**
+```
+db.<collection-name>.find({"parent.child":value})
+
+db.comments.find({'comments.user':'Kevin'})
+db.comments.find({'metadata.views':{$gt:1000}})
+db.comments.find({"comments.user":"Henry","metadata.likes":{$gt:50}})
+```
+11. **$all vs $elemMatch**
+```
+{<field>:{$all:[<value1>,<value2>,...]}}
+
+db.comments.find({"comments.user":{$all:['Alice','Vinod']}})
+```
+```
+{<field>:{$elemMatch:{<query1>,<query2>,...}}}
+
+db.comments.find({"comments":{$elemMatch:{"user":"Vinod","text":"Thanks for sharing."}}})
+```
+
+## Update Operations in MongoDB
+
 
 
