@@ -74,9 +74,7 @@ Unordered Inserts : MongoDB keeps processing after encounting an error.
 db.<collection-name>.find({key:value});
 db.<collection-name>.findOne({key:value});
 ```
-2. **Importing JSON**
-<br>
-To import documents from json file, exit mongosh and type the following commands in your terminal: 
+2. **Importing JSON** 
 ```
 mongoimport jsonfile.json -d database_name -c collection_name
 mongoimport jsonfile.json -d database_name -c collection_name --jsonArray
@@ -85,8 +83,6 @@ C:\Users\US593>mongoimport C:\Users\US593\OneDrive\Desktop\import_json\products.
 C:\Users\US593>mongoimport C:\Users\US593\OneDrive\Desktop\import_json\sales.json -d shop -c sales --jsonArray
 ```
 3. **Exporting JSON**
-<br>
-To export documents to json file, type the following commands in your terminal:
 ```
 mongoexport -d database_name -c collection_name -o file_name
 
