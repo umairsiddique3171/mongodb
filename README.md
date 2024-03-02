@@ -1,4 +1,16 @@
 # mongodb
+Welcome to my GitHub repository dedicated to MongoDB!
+<br>
+Here, you'll find practice code and notes I created while learning MongoDB DBMS.
+
+## Table of Contents
+- [Installation](#installation)
+- [Installation Verification](#installation-verification)
+- [Databases and Collections Management in MongoDB](#databases-and-collections-management-in-mongodb)
+- [Insert Operations in MongoDB](#insert-operations-in-mongodb)
+- [Read Operations in MongoDB](#read-operations-in-mongodb)
+- [Update Operations in MongoDB](#update-operations-in-mongodb)
+- [Delete Operations in MongoDB](#delete-operations-in-mongodb)
 
 ## Installation 
 Download and Install MongoDB Server, Shell and Database Tools from [here](https://www.mongodb.com/try/download/community-edition).
@@ -197,5 +209,75 @@ db.comments.find({"comments":{$elemMatch:{"user":"Vinod","text":"Thanks for shar
 
 ## Update Operations in MongoDB
 
+1. **updateOne() and updateMany()**
+```
+db.<collection-name>.updateOne(
+  {filter},
+  {$set:{existingField:newValue,newField:newValue,...},});
 
+  db.products.updateOne({_id: ObjectId('64c236a2e32f4a51b19b9286')},{$set:{'price':50,'tax':2.5}});
+```
+```
+db.<collection-name>.updateMany(
+  {filter},
+  {$set:{existingField:newValue,newField:newValue,...},});
+
+  db.products.updateMany({'price':120},{$set:{'isFeatured':true,'tax_applied':false}});
+```
+2. **Adding New Fields**
+```
+db.<collection-name>.updateOne(
+  {filter},
+  {$set:{newField:newValue,...},});
+
+  db.products.updateOne({_id: ObjectId('64c236a2e32f4a51b19b9286')},{$set:{'tax':2.5}});
+```
+3. **Removing and Renaming Fields**
+```
+db.<collection-name>.updateOne({filter},{$unset:{fieldName:1}});
+
+db.products.updateMany({'price':120},{$unset:{'tax_applied':1}});
+```
+```
+db.<collection-name>.updateOne({filter},{$rename:{oldFieldName:"newFieldName"}});
+
+db.products.updateMany({'price':123},{$rename:{'isFeatured':'isFeature'}});
+```
+4. **Updating Arrays and Embedded Documents**
+```
+db.<collection-name>.updateOne(
+  {filter},
+  {$push:{arrayField:"new element"}}
+);
+
+db.comments.updateOne({_id:2},{$push:{comments: {user:"Umair",age:"20"}}});
+```
+```
+db.<collection-name>.updateOne(
+  {filter},
+  {$pop:{arrayField:value}}
+);
+
+db.comments.updateOne({_id:2},{$pop:{comments:1}});
+```
+```
+db.<collection-name>.updateOne(
+  {filter},
+  {$set:{"arrayField.$.text":"Updated text"}}
+);
+
+db.comments.updateOne({'_id':7,'comments.user':'Alice'},{$set:{'comments.$.text':'Great Umair'}})
+```
+
+## Delete Operations in MongoDB
+```
+db.<collection-name>.deleteOne({filter});
+
+db.comments.deleteOne({'_id':1})
+```
+```
+db.<collection-name>.deleteMany({filter});
+
+db.comments.deleteMany({'metadata.views':{$gt:1000}})
+```
 
