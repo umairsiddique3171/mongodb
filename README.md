@@ -11,6 +11,7 @@ Here, you'll find practice code and notes I created while learning MongoDB DBMS.
 - [Read Operations in MongoDB](#read-operations-in-mongodb)
 - [Update Operations in MongoDB](#update-operations-in-mongodb)
 - [Delete Operations in MongoDB](#delete-operations-in-mongodb)
+- [Notes](#)
 
 ## Installation 
 Download and Install MongoDB Server, Shell and Database Tools from [here](https://www.mongodb.com/try/download/community-edition).
@@ -140,7 +141,7 @@ db.products.find({
     { 'price': { '$lt': 1000 } },
     { 'name': 'Diamond Ring' }
   ]
-})
+  });
 ```
 
 not
@@ -154,13 +155,13 @@ not
 
 db.products.find({
     'price':{$not:{$eq:100}}
-    })
+  });
 ```
 7. **Complex Expressions**
 ```
 {$expr:{operator:[field,value]}}
  
-db.sales.find({$expr:{$gt:[{$multiply:['$quantity','$price']},'$target_price']}})
+db.sales.find({$expr:{$gt:[{$multiply:['$quantity','$price']},'$target_price']}});
 ```
 8. **Elements Operators**
 ```
@@ -169,42 +170,42 @@ $exists     $type     $size
 ```
 {field:{$exists:<boolean>}}
 
-db.products.find({'price':{$exists:true}}).count()
+db.products.find({'price':{$exists:true}}).count();
 ```
 ```
 {field:{$type:"<bson-data-type>"}}
 
-db.products.find({'price':{$type:'number'}}).count()
+db.products.find({'price':{$type:'number'}}).count();
 ```
 ```
 {field:{$size:<array-length>}}
 
-db.comments.find({'comments':{$size:4}})
+db.comments.find({'comments':{$size:4}});
 ```
 9. **Projection**
 ```
-db.<collection-name>.find({},{field1:1,field2:1})
+db.<collection-name>.find({},{field1:1,field2:1});
 
-db.comments.find({},{comments:1,_id:0})
+db.comments.find({},{comments:1,_id:0});
 ```
 10. **Embedded Documents**
 ```
-db.<collection-name>.find({"parent.child":value})
+db.<collection-name>.find({"parent.child":value});
 
-db.comments.find({'comments.user':'Kevin'})
-db.comments.find({'metadata.views':{$gt:1000}})
-db.comments.find({"comments.user":"Henry","metadata.likes":{$gt:50}})
+db.comments.find({'comments.user':'Kevin'});
+db.comments.find({'metadata.views':{$gt:1000}});
+db.comments.find({"comments.user":"Henry","metadata.likes":{$gt:50}});
 ```
 11. **$all vs $elemMatch**
 ```
 {<field>:{$all:[<value1>,<value2>,...]}}
 
-db.comments.find({"comments.user":{$all:['Alice','Vinod']}})
+db.comments.find({"comments.user":{$all:['Alice','Vinod']}});
 ```
 ```
 {<field>:{$elemMatch:{<query1>,<query2>,...}}}
 
-db.comments.find({"comments":{$elemMatch:{"user":"Vinod","text":"Thanks for sharing."}}})
+db.comments.find({"comments":{$elemMatch:{"user":"Vinod","text":"Thanks for sharing."}}});
 ```
 
 ## Update Operations in MongoDB
@@ -213,71 +214,117 @@ db.comments.find({"comments":{$elemMatch:{"user":"Vinod","text":"Thanks for shar
 ```
 db.<collection-name>.updateOne(
   {filter},
-  {$set:{existingField:newValue,newField:newValue,...},});
+  {$set:{existingField:newValue,newField:newValue,...},}
+  );
 
-  db.products.updateOne({_id: ObjectId('64c236a2e32f4a51b19b9286')},{$set:{'price':50,'tax':2.5}});
+db.products.updateOne(
+  {_id: ObjectId('64c236a2e32f4a51b19b9286')},
+  {$set:{'price':50,'tax':2.5}}
+  );
 ```
 ```
 db.<collection-name>.updateMany(
   {filter},
-  {$set:{existingField:newValue,newField:newValue,...},});
+  {$set:{existingField:newValue,newField:newValue,...},}
+  );
 
-  db.products.updateMany({'price':120},{$set:{'isFeatured':true,'tax_applied':false}});
+db.products.updateMany(
+  {'price':120},
+  {$set:{'isFeatured':true,'tax_applied':false}}
+  );
 ```
 2. **Adding New Fields**
 ```
 db.<collection-name>.updateOne(
   {filter},
-  {$set:{newField:newValue,...},});
+  {$set:{newField:newValue,...},}
+  );
 
-  db.products.updateOne({_id: ObjectId('64c236a2e32f4a51b19b9286')},{$set:{'tax':2.5}});
+db.products.updateOne(
+  {_id: ObjectId('64c236a2e32f4a51b19b9286')},
+  {$set:{'tax':2.5}}
+  );
 ```
 3. **Removing and Renaming Fields**
 ```
-db.<collection-name>.updateOne({filter},{$unset:{fieldName:1}});
+db.<collection-name>.updateOne(
+  {filter},
+  {$unset:{fieldName:1}}
+  );
 
-db.products.updateMany({'price':120},{$unset:{'tax_applied':1}});
+db.products.updateMany(
+  {'price':120},
+  {$unset:{'tax_applied':1}}
+  );
 ```
 ```
-db.<collection-name>.updateOne({filter},{$rename:{oldFieldName:"newFieldName"}});
+db.<collection-name>.updateOne(
+  {filter},
+  {$rename:{oldFieldName:"newFieldName"}}
+  );
 
-db.products.updateMany({'price':123},{$rename:{'isFeatured':'isFeature'}});
+db.products.updateMany(
+  {'price':123},
+  {$rename:{'isFeatured':'isFeature'}}
+  );
 ```
 4. **Updating Arrays and Embedded Documents**
 ```
 db.<collection-name>.updateOne(
   {filter},
   {$push:{arrayField:"new element"}}
-);
+  );
 
-db.comments.updateOne({_id:2},{$push:{comments: {user:"Umair",age:"20"}}});
+db.comments.updateOne(
+  {_id:2},
+  {$push:{comments: {user:"Umair",age:"20"}}}
+  );
 ```
 ```
 db.<collection-name>.updateOne(
   {filter},
   {$pop:{arrayField:value}}
-);
+  );
 
-db.comments.updateOne({_id:2},{$pop:{comments:1}});
+db.comments.updateOne(
+  {_id:2},
+  {$pop:{comments:1}}
+  );
 ```
 ```
 db.<collection-name>.updateOne(
   {filter},
   {$set:{"arrayField.$.text":"Updated text"}}
-);
+  );
 
-db.comments.updateOne({'_id':7,'comments.user':'Alice'},{$set:{'comments.$.text':'Great Umair'}})
+db.comments.updateOne(
+  {'_id':7,'comments.user':'Alice'},
+  {$set:{'comments.$.text':'Great Umair'}}
+  );
 ```
 
 ## Delete Operations in MongoDB
 ```
 db.<collection-name>.deleteOne({filter});
 
-db.comments.deleteOne({'_id':1})
+db.comments.deleteOne({'_id':1});
 ```
 ```
 db.<collection-name>.deleteMany({filter});
 
-db.comments.deleteMany({'metadata.views':{$gt:1000}})
+db.comments.deleteMany({'metadata.views':{$gt:1000}});
 ```
+
+## Notes
+For further knowledge, please refer to the notes document [here](https://github.com/umairsiddique3171/mongodb/blob/main/mongodb_notes1.pdf).
+
+## Documentation
+For more detailed information, please refer to the MongoDB documentation available [here](https://www.mongodb.com/docs/).
+
+## Acknowledgements
+- [Thapa Technical](https://www.youtube.com/watch?v=rU9ZODw5yvU&list=PLDu63tdZPqVkEGCQz0y5C_qGSeJ0Ty8gr&index=1)
+
+## Author
+[@umairsiddique3171](https://github.com/umairsiddique3171)
+
 
